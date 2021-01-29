@@ -23,13 +23,21 @@ block_C.history = 'Marie likes dog'
 block_C.parent_id = block_B.id
 block_C.parent_hash = hashlib.sha256(json.dumps(block_B.__dict__).encode('utf-8')).hexdigest()
 
+block_D = Block()
+block_D.id = 4
+block_D.history = 'Sky loves turtle'
+block_D.parent_id = block_C.id
+
+
 
 if __name__ == '__main__':
-    print(block_B.__dict__)
-    print(json.dumps(block_B.__dict__))
-    print(hashlib.sha256(json.dumps(block_B.__dict__).encode('utf-8')))
-    block_A.history = 'Nelson hates cat'
-    print(block_C.parent_hash)
-    block_B.parent_hash = hashlib.sha256(json.dumps(block_A.__dict__).encode('utf-8')).hexdigest()
-    block_C.parent_hash = hashlib.sha256(json.dumps(block_B.__dict__).encode('utf-8')).hexdigest()
-    print(block_C.parent_hash)
+    block_serialized = json.dumps(block_D.__dict__).encode('utf-8')
+    print(block_serialized)
+    payload = b'{"history": "Sky loves turtle", "parent_id": 3, "id": 4}'
+    for i in range(1000000):
+        nonce = str(i).encode('utf-8')
+        result = hashlib.sha256(payload + nonce).hexdigest()
+        if result[0:5] == '00000':
+            print(i)
+            print(result)
+            break
